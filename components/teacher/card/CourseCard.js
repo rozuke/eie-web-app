@@ -7,16 +7,15 @@ import {
   styled,
 } from "@mui/material";
 import React from "react";
-import styles from "./components.module.css";
+import styles from "../components.module.css";
 
 const CourseCard = () => {
-  const StyledActionCard = styled(CardActionArea)({});
   return (
-    <Card sx={{ width: "15vw", height: 200 }}>
+    <Card sx={{ maxHeight: 200, maxWidth: 200 }}>
       <CardActionArea style={{ height: "200px" }}>
         <div className={styles.card_container}>
           <div className={styles.filled_name}>
-            <Typography gutterBottom variant="h5" component="h2">
+            <Typography gutterBottom variant="h5" component="div">
               CB1
             </Typography>
           </div>

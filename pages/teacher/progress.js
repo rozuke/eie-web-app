@@ -1,10 +1,10 @@
 import { Grid } from "@mui/material";
 import { Container } from "@mui/system";
 import React from "react";
-import CardStudent from "./components/CardStudent";
-import CardTotal from "./components/CardTotal";
-import Layout from "./components/Layout";
-import StudentTable from "./components/StudentTable";
+import CardStudent from "../../components/teacher/card/CardStudent";
+import CardTotal from "../../components/teacher/card/CardTotal";
+import Layout from "../../components/teacher/Layout";
+import StudentTable from "../../components/teacher/StudentTable";
 
 const Progress = () => {
   return (

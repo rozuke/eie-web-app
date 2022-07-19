@@ -1,8 +1,8 @@
 import { Card, CardActionArea, Typography } from "@mui/material";
 import Image from "next/image";
 import React from "react";
-import foroLogo from "../../public/image/foro-logo.png";
-import styles from "./components.module.css";
+import foroLogo from "../../../public/image/foro-logo.png";
+import styles from "../components.module.css";
 
 const ActivityCard = () => {
   return (

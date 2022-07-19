@@ -1,7 +1,6 @@
 import { Grid } from "@mui/material";
-import ActivityCard from "./components/ActivityCard";
-import Appbar from "./components/Appbar";
-import Layout from "./components/Layout";
+import ActivityCard from "../../components/teacher/card/ActivityCard";
+import Layout from "../../components/teacher/Layout";
 
 const Activity = () => {
   return (
