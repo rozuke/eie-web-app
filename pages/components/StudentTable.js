@@ -46,7 +46,6 @@ const StudentTable = () => {
               key={row.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              {console.log(rows.length)}
               <TableCell component="th" scope="row">
                 {row.name}
               </TableCell>
