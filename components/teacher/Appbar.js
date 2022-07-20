@@ -13,7 +13,7 @@ import eieLogo from "../../public/image/eie-logo.png";
 
 const Appbar = () => {
   return (
-    <AppBar position="fixed" flexGrow="row">
+    <AppBar position="static" flexGrow="row">
       <Toolbar>
         <Button variant="text">
           <Image src={eieLogo} width="40" height="40" />

@@ -1,6 +1,6 @@
 import { Container, Grid } from "@mui/material";
-import ActivitiesTable from "./components/ActivitiesTable";
-import Layout from "./components/Layout";
+import ActivitiesTable from "../../components/teacher/ActivitiesTable";
+import Layout from "../../components/teacher/Layout";
 
 const Review = () => {
   return (
