@@ -12,6 +12,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import eieLogo from "../public/image/eie-logo.png";
+import loginImage from "../public/login.jpeg";
 function Copyright(props) {
   return (
     <Typography
@@ -47,7 +48,7 @@ const Index = () => {
         sm={4}
         md={7}
         sx={{
-          backgroundImage: "url(https://source.unsplash.com/random)",
+          backgroundImage: "url(login.jpeg)",
           backgroundRepeat: "no-repeat",
           backgroundColor: (t) =>
             t.palette.mode === "light"
@@ -57,6 +58,7 @@ const Index = () => {
           backgroundPosition: "center",
         }}
       />
+
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
           sx={{
