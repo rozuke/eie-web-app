@@ -10,8 +10,8 @@ import {
   Typography,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { AccountCircle as UserCircleIcon } from "@mui/icons-material";
 import eieiLogo from "../../public/image/eie-logo.png";
+import { useSession } from "next-auth/react";
 const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
   backgroundColor: theme.palette.primary.main,
   boxShadow: theme.shadows[3],
@@ -19,7 +19,7 @@ const DashboardNavbarRoot = styled(AppBar)(({ theme }) => ({
 
 export const DashboardNavbar = (props) => {
   const { onSidebarOpen, ...other } = props;
-
+  const { status, data: session } = useSession();
   return (
     <>
       <DashboardNavbarRoot
@@ -57,8 +57,11 @@ export const DashboardNavbar = (props) => {
 
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: "flex", flexFlow: "column" }}>
-            <Typography variant="body2">Natali Lizarasu</Typography>
-            <Typography variant="caption">administrator</Typography>
+            <Typography variant="body2">
+              {status === "authenticated" &&
+                `${session.persona.nombre} ${session.persona.apellidoPaterno} ${session.persona.apellidoMaterno}`}
+            </Typography>
+            <Typography variant="caption">Administrator</Typography>
           </Box>
           <Avatar
             sx={{
@@ -66,9 +69,15 @@ export const DashboardNavbar = (props) => {
               width: 40,
               ml: 1,
             }}
-            src="/static/images/avatars/avatar_1.png"
+
+            // src={session.user.image}
           >
-            <UserCircleIcon fontSize="small" />
+            <img
+              style={{ width: "40px", height: "40px" }}
+              referrerPolicy="no-referrer"
+              src={status === "authenticated" && session.user.image}
+              alt="ADM"
+            />
           </Avatar>
         </Toolbar>
       </DashboardNavbarRoot>

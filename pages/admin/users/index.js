@@ -1,14 +1,14 @@
 import Head from "next/head";
-import { Box, Container, Grid, Pagination } from "@mui/material";
-import { CourseListToolbar } from "../../components/admin/course/course-list-toolbar";
-import { DashboardLayout } from "../../components/admin/dashboard-layout";
-import { UserListResults } from "../../components/admin/user/user-list-results";
+import { Box, Card, CardContent, Container } from "@mui/material";
+import { UserListResults } from "../../../components/admin/user/user-list-results";
+import { UserListToolbar } from "../../../components/admin/user/user-list-toolbar";
+import { DashboardLayout } from "../../../components/admin/dashboard-layout";
 import { getSession } from "next-auth/react";
-
-const CourseDetail = () => (
+import axios from "axios";
+const Users = ({ users }) => (
   <DashboardLayout>
     <Head>
-      <title>EIE Platform</title>
+      <title>Users | EIE</title>
     </Head>
     <Box
       component="main"
@@ -18,9 +18,9 @@ const CourseDetail = () => (
       }}
     >
       <Container maxWidth={false}>
-        <CourseListToolbar />
+        <UserListToolbar />
         <Box sx={{ mt: 3, height: 400, boxShadow: 3, borderRadius: 2 }}>
-          <UserListResults />
+          <UserListResults users={users} />
         </Box>
       </Container>
     </Box>
@@ -28,7 +28,9 @@ const CourseDetail = () => (
 );
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-
+  const users = await axios.get(
+    "https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api/users"
+  );
   if (!session) {
     return {
       redirect: {
@@ -49,7 +51,10 @@ export const getServerSideProps = async (ctx) => {
   }
 
   return {
-    props: {},
+    props: {
+      users: users.data,
+    },
   };
 };
-export default CourseDetail;
+
+export default Users;

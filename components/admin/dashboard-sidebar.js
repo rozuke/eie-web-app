@@ -17,6 +17,7 @@ import {
   Group,
   LibraryBooks,
   Person,
+  Logout,
 } from "@mui/icons-material";
 
 const items = [
@@ -35,30 +36,11 @@ const items = [
     icon: <LibraryBooks fontSize="small" />,
     title: "Courses",
   },
+
   {
-    href: "/account",
-    icon: <ArrowBack fontSize="small" />,
-    title: "Account",
-  },
-  {
-    href: "/settings",
-    icon: <ArrowBack fontSize="small" />,
-    title: "Settings",
-  },
-  {
-    href: "/login",
-    icon: <ArrowBack fontSize="small" />,
-    title: "Login",
-  },
-  {
-    href: "/register-user",
-    icon: <ArrowBack fontSize="small" />,
-    title: "Register",
-  },
-  {
-    href: "/404",
-    icon: <ArrowBack fontSize="small" />,
-    title: "Error",
+    href: "../",
+    icon: <Logout fontSize="small" />,
+    title: "Logout",
   },
 ];
 

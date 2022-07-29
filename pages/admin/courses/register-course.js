@@ -17,52 +17,62 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useState } from "react";
+import { getSession } from "next-auth/react";
+import { CourseProvider } from "../../../context/courseContext";
 
 const books = [
   {
-    value: "1",
+    value: 1,
     label: "Book 1",
   },
   {
-    value: "2",
+    value: 2,
     label: "Book 2",
   },
   {
-    value: "3",
+    value: 3,
     label: "Book 3",
   },
   {
-    value: "4",
+    value: 4,
     label: "Book 4",
   },
   {
-    value: "5",
+    value: 5,
     label: "Book 5",
+  },
+  {
+    value: 6,
+    label: "Book 6",
   },
 ];
 
 const RegisterCourse = () => {
   const router = useRouter();
-  const [book, setBook] = useState("Book 1");
+  const [book, setBook] = useState(1);
 
   const handleChangeBook = (event) => {
     setBook(event.target.value);
   };
+
+  const validationSchema = Yup.object().shape({
+    courseName: Yup.string()
+      .max(255)
+      .required("Course name is required")
+      .nullable(),
+  });
   const formik = useFormik({
     initialValues: {
       courseName: "",
-      book: "",
     },
-    validationSchema: Yup.object({
-      courseName: Yup.string().max(255).required("Course name is required"),
-    }),
-    onSubmit: () => {
-      router.push("/");
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
     },
   });
 
   return (
-    <>
+    <CourseProvider>
       <Head>
         <title>Register course | EIE</title>
       </Head>
@@ -76,11 +86,14 @@ const RegisterCourse = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink href="/" passHref>
-            <Button component="a" startIcon={<ArrowBackIcon fontSize="small" />}>
-              Back
-            </Button>
-          </NextLink>
+          <Button
+            component="a"
+            startIcon={<ArrowBackIcon fontSize="small" />}
+            onClick={() => router.back()}
+          >
+            Back
+          </Button>
+
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography color="textPrimary" variant="h4">
@@ -91,7 +104,9 @@ const RegisterCourse = () => {
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.courseName && formik.errors.courseName)}
+              error={Boolean(
+                formik.touched.courseName && formik.errors.courseName
+              )}
               fullWidth
               helperText={formik.touched.courseName && formik.errors.courseName}
               label="Course Name"
@@ -137,8 +152,33 @@ const RegisterCourse = () => {
           </form>
         </Container>
       </Box>
-    </>
+    </CourseProvider>
   );
 };
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
 
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  if (session !== null) {
+    if (session.rolId !== 3) {
+      return {
+        redirect: {
+          destination: "/teacher",
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
+};
 export default RegisterCourse;

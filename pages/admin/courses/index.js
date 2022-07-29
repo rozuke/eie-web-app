@@ -1,14 +1,14 @@
 import Head from "next/head";
 import { Box, Container, Grid, Pagination } from "@mui/material";
-import { CourseListToolbar } from "../../components/admin/course/course-list-toolbar";
-import { DashboardLayout } from "../../components/admin/dashboard-layout";
-import { UserListResults } from "../../components/admin/user/user-list-results";
+import { CourseListToolbar } from "../../../components/admin/course/course-list-toolbar";
+import { CourseListResult } from "../../../components/admin/course/course-list-result";
+import { DashboardLayout } from "../../../components/admin/dashboard-layout";
 import { getSession } from "next-auth/react";
 
-const CourseDetail = () => (
+const Course = () => (
   <DashboardLayout>
     <Head>
-      <title>EIE Platform</title>
+      <title>Products | Material Kit</title>
     </Head>
     <Box
       component="main"
@@ -20,7 +20,7 @@ const CourseDetail = () => (
       <Container maxWidth={false}>
         <CourseListToolbar />
         <Box sx={{ mt: 3, height: 400, boxShadow: 3, borderRadius: 2 }}>
-          <UserListResults />
+          <CourseListResult />
         </Box>
       </Container>
     </Box>
@@ -52,4 +52,4 @@ export const getServerSideProps = async (ctx) => {
     props: {},
   };
 };
-export default CourseDetail;
+export default Course;

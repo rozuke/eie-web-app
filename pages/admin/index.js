@@ -7,7 +7,20 @@ import { TotatlCourses } from "../../components/admin/dashboard/total-courses";
 import { StudentCircle } from "../../components/admin/dashboard/studentCircle";
 import { DashboardLayout } from "../../components/admin/dashboard-layout";
 import { getSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
 const Dashboard = ({ session }) => {
+  const router = useRouter();
+
+  // useEffect(() => {
+  //   if (session) {
+  //     if (session.rolId !== 1) {
+  //       console.log("acceso denegado");
+  //       router.push("/teacher");
+  //     }
+  //   }
+  // }, []);
+
   return (
     <DashboardLayout>
       <Head>
@@ -45,6 +58,26 @@ const Dashboard = ({ session }) => {
 };
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  if (session !== null) {
+    if (session.rolId !== 3) {
+      return {
+        redirect: {
+          destination: "/teacher",
+          permanent: false,
+        },
+      };
+    }
+  }
+
   return {
     props: {
       session,

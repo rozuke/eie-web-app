@@ -1,5 +1,4 @@
 import Head from "next/head";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -17,19 +16,22 @@ import {
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useState } from "react";
-
+import axios from "axios";
+import { getSession } from "next-auth/react";
+import { useUsers } from "../../../context/userContext";
+import Swal from "sweetalert2";
 const rolls = [
   {
-    value: "admin",
-    label: "Admin",
-  },
-  {
-    value: "student",
+    value: 1,
     label: "Student",
   },
   {
-    value: "teacher",
+    value: 2,
     label: "Teacher",
+  },
+  {
+    value: 3,
+    label: "Admin",
   },
 ];
 
@@ -45,8 +47,9 @@ const types = [
 ];
 
 const RegisterUser = () => {
+  const { user } = useUsers();
   const router = useRouter();
-  const [rol, setRol] = useState("student");
+  const [rol, setRol] = useState(1);
   const [type, setType] = useState("civil");
 
   const handleChangeRol = (event) => {
@@ -56,26 +59,112 @@ const RegisterUser = () => {
   const handleChangeType = (event) => {
     setType(event.target.value);
   };
+
+  const createUser = async (newUser) => {
+    await axios
+      .post(
+        "https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api/user",
+        newUser
+      )
+      .then((res) => {
+        if (res) {
+          Swal.fire({
+            icon: "success",
+            title: "User has been created",
+            showConfirmButton: true,
+          }).then((response) => {
+            if (response.isConfirmed) {
+              router.push("/admin/users");
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  };
+
+  const updateUser = async (id, newUserData) => {
+    await axios
+      .put(
+        `https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api/user/${id}`,
+        newUserData
+      )
+      .then((res) => {
+        if (res) {
+          if (res) {
+            Swal.fire({
+              icon: "success",
+              title: "User has been updated",
+              showConfirmButton: true,
+            }).then((response) => {
+              if (response.isConfirmed) {
+                router.push("/admin/users");
+              }
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  };
+
+  const validationSchema = Yup.object().shape({
+    email: Yup.string()
+      .email("Must be a valid email")
+      .max(255)
+      .required("Email is required")
+      .nullable(),
+    firstName: Yup.string()
+      .max(255)
+      .required("First name is required")
+      .nullable(),
+    lastName: Yup.string()
+      .max(255)
+      .required("Last name is required")
+      .nullable(),
+    secondLastName: Yup.string()
+      .max(255)
+      .required("Second last name is required")
+      .nullable(),
+    // password: Yup.string().max(255).required("Password name is required"),
+  });
   const formik = useFormik({
     initialValues: {
-      email: "",
-      firstName: "",
-      lastName: "",
-      secondLastName: "",
-      password: "",
-      rol: "",
-      type: "",
+      email: user.email,
+      firstName: user.nombre,
+      lastName: user.apellidoPaterno,
+      secondLastName: user.apellidoMaterno,
+      // password: "",
     },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Must be a valid email").max(255).required("Email is required"),
-      firstName: Yup.string().max(255).required("First name is required"),
-      lastName: Yup.string().max(255).required("Last name is required"),
-      secondLastName: Yup.string().max(255).required("Second last name is required"),
-      password: Yup.string().max(255).required("Password name is required"),
-    }),
-    onSubmit: () => {
-      router.push("/");
+    onSubmit: (values) => {
+      const newData = {
+        nombre: values.firstName,
+        apellidoPaterno: values.lastName,
+        apellidoMaterno: values.secondLastName,
+        tipo: type,
+        usuario: {
+          email: values.email,
+          rolId: rol,
+        },
+      };
+      const userId = router.query.id;
+      if (!userId) {
+        createUser(newData);
+      } else {
+        updateUser(userId, newData);
+      }
     },
+    validationSchema: validationSchema,
   });
 
   return (
@@ -93,22 +182,27 @@ const RegisterUser = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink href="/" passHref>
-            <Button component="a" startIcon={<ArrowBackIcon fontSize="small" />}>
-              Back
-            </Button>
-          </NextLink>
+          <Button
+            component="a"
+            startIcon={<ArrowBackIcon fontSize="small" />}
+            onClick={() => router.back()}
+          >
+            Back
+          </Button>
+
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography color="textPrimary" variant="h4">
-                Create a new user
+                {router.query.id ? "Edit user" : "Register user"}
               </Typography>
               <Typography color="textSecondary" gutterBottom variant="body2">
                 Email will be used as username
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.firstName && formik.errors.firstName)}
+              error={Boolean(
+                formik.touched.firstName && formik.errors.firstName
+              )}
               fullWidth
               helperText={formik.touched.firstName && formik.errors.firstName}
               label="First Name"
@@ -123,7 +217,7 @@ const RegisterUser = () => {
               error={Boolean(formik.touched.lastName && formik.errors.lastName)}
               fullWidth
               helperText={formik.touched.lastName && formik.errors.lastName}
-              label="Last Name"
+              label="Father's last Name"
               margin="normal"
               name="lastName"
               onBlur={formik.handleBlur}
@@ -132,10 +226,14 @@ const RegisterUser = () => {
               variant="outlined"
             />
             <TextField
-              error={Boolean(formik.touched.secondLastName && formik.errors.secondLastName)}
+              error={Boolean(
+                formik.touched.secondLastName && formik.errors.secondLastName
+              )}
               fullWidth
-              helperText={formik.touched.secondLastName && formik.errors.secondLastName}
-              label="Second last Name"
+              helperText={
+                formik.touched.secondLastName && formik.errors.secondLastName
+              }
+              label="Mother's last Name"
               margin="normal"
               name="secondLastName"
               onBlur={formik.handleBlur}
@@ -156,7 +254,7 @@ const RegisterUser = () => {
               value={formik.values.email}
               variant="outlined"
             />
-            <TextField
+            {/* <TextField
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth
               helperText={formik.touched.password && formik.errors.password}
@@ -168,14 +266,14 @@ const RegisterUser = () => {
               type="password"
               value={formik.values.password}
               variant="outlined"
-            />
+            /> */}
             <Grid container>
               <Grid item xs={6}>
                 <TextField
                   id="select-rol"
                   margin="normal"
                   select
-                  label="Select"
+                  label="Rol"
                   value={rol}
                   onChange={handleChangeRol}
                   helperText="Please select a rol"
@@ -192,7 +290,7 @@ const RegisterUser = () => {
                   id="select-type"
                   margin="normal"
                   select
-                  label="Select"
+                  label="Type"
                   value={type}
                   onChange={handleChangeType}
                   helperText="Please select a type"
@@ -215,7 +313,7 @@ const RegisterUser = () => {
                 type="submit"
                 variant="contained"
               >
-                Create user account
+                {router.query.id ? "Update user" : "Create user"}
               </Button>
             </Box>
           </form>
@@ -225,4 +323,30 @@ const RegisterUser = () => {
   );
 };
 
+export const getServerSideProps = async (ctx) => {
+  const session = await getSession(ctx);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+  if (session !== null) {
+    if (session.rolId !== 3) {
+      return {
+        redirect: {
+          destination: "/teacher",
+          permanent: false,
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
+};
 export default RegisterUser;

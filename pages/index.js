@@ -33,7 +33,7 @@ function Copyright(props) {
   );
 }
 
-const Index = ({ session }) => {
+const Index = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -135,9 +135,7 @@ export async function getServerSideProps({ req }) {
     };
   }
   return {
-    props: {
-      session,
-    },
+    props: {},
   };
 }
 

@@ -16,7 +16,11 @@ export const UserListToolbar = (props) => (
         Users
       </Typography>
       <Box sx={{ m: 1 }}>
-        <Button color="primary" variant="contained">
+        <Button
+          color="primary"
+          variant="contained"
+          href="/admin/users/register-user"
+        >
           Add User
         </Button>
       </Box>
