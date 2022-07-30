@@ -10,8 +10,10 @@ import {
   Typography,
 } from "@mui/material";
 import { useRouter } from "next/router";
+import { useCourse } from "../../../context/courseContext";
 
 export const CourseListToolbar = () => {
+  const { course } = useCourse();
   const router = useRouter();
   return (
     <Box>
@@ -25,7 +27,7 @@ export const CourseListToolbar = () => {
         }}
       >
         <Typography sx={{ m: 1 }} variant="h4">
-          Courses
+          {router.query.id ? course.nombre : "Courses"}
         </Typography>
         <Box sx={{ m: 1 }}>
           <Button
@@ -33,7 +35,8 @@ export const CourseListToolbar = () => {
             variant="contained"
             onClick={() => router.push("/admin/courses/register-course")}
           >
-            Add course
+            {router.query.id ? "Add user" : "Add course"}
+            {console.log(course)}
           </Button>
         </Box>
       </Box>

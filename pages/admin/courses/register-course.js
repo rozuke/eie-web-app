@@ -18,8 +18,9 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useState } from "react";
 import { getSession } from "next-auth/react";
-import { CourseProvider } from "../../../context/courseContext";
-
+import axios from "axios";
+import Swal from "sweetalert2";
+import { CourseProvider, useCourse } from "../../../context/courseContext";
 const books = [
   {
     value: 1,
@@ -48,6 +49,7 @@ const books = [
 ];
 
 const RegisterCourse = () => {
+  const { course } = useCourse();
   const router = useRouter();
   const [book, setBook] = useState(1);
 
@@ -55,6 +57,63 @@ const RegisterCourse = () => {
     setBook(event.target.value);
   };
 
+  const createCouse = async (courseData) => {
+    await axios
+      .post(
+        "https://qnnijeqn9g.execute-api.sa-east-1.amazonaws.com/api/course",
+        courseData
+      )
+      .then((res) => {
+        if (res) {
+          Swal.fire({
+            icon: "success",
+            title: "Course has been created",
+            showConfirmButton: true,
+          }).then((response) => {
+            if (response.isConfirmed) {
+              router.push("/admin/courses");
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  };
+
+  const updateCourse = async (id, newCourseData) => {
+    await axios
+      .put(
+        `https://qnnijeqn9g.execute-api.sa-east-1.amazonaws.com/api/course/${id}`,
+        newCourseData
+      )
+      .then((res) => {
+        if (res) {
+          if (res) {
+            Swal.fire({
+              icon: "success",
+              title: "Course has been updated",
+              showConfirmButton: true,
+            }).then((response) => {
+              if (response.isConfirmed) {
+                router.push("/admin/courses");
+              }
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong!",
+        });
+      });
+  };
   const validationSchema = Yup.object().shape({
     courseName: Yup.string()
       .max(255)
@@ -63,11 +122,20 @@ const RegisterCourse = () => {
   });
   const formik = useFormik({
     initialValues: {
-      courseName: "",
+      courseName: course.nombre,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      const dataCourse = {
+        nombre: values.courseName,
+        libroId: book,
+      };
+      const courseId = router.query.id;
+      if (!courseId) {
+        createCouse(dataCourse);
+      } else {
+        updateCourse(courseId, dataCourse);
+      }
     },
   });
 
@@ -97,7 +165,7 @@ const RegisterCourse = () => {
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography color="textPrimary" variant="h4">
-                Create a new course
+                {router.query.id ? "Edit course" : "Register course"}
               </Typography>
               <Typography color="textSecondary" gutterBottom variant="body2">
                 You will have to edit the course once the book is finished.
@@ -146,7 +214,7 @@ const RegisterCourse = () => {
                 type="submit"
                 variant="contained"
               >
-                Create user account
+                {router.query.id ? "Update course" : "Create course"}
               </Button>
             </Box>
           </form>

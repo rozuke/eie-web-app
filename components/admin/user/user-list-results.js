@@ -15,7 +15,7 @@ export const UserListResults = ({ users }) => {
       text: "You will delete this user",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: "primary",
+      confirmButtonColor: "#003566",
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
@@ -26,7 +26,7 @@ export const UserListResults = ({ users }) => {
           )
           .then((res) => {
             if (res) {
-              Swal.fire("Deleted!", "Your file has been deleted.", "success");
+              Swal.fire("Deleted!", "User has been deleted.", "success");
             }
           })
           .catch((err) => {

@@ -7,20 +7,9 @@ import { TotatlCourses } from "../../components/admin/dashboard/total-courses";
 import { StudentCircle } from "../../components/admin/dashboard/studentCircle";
 import { DashboardLayout } from "../../components/admin/dashboard-layout";
 import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-const Dashboard = ({ session }) => {
-  const router = useRouter();
-
-  // useEffect(() => {
-  //   if (session) {
-  //     if (session.rolId !== 1) {
-  //       console.log("acceso denegado");
-  //       router.push("/teacher");
-  //     }
-  //   }
-  // }, []);
-
+import { TotalAdmin } from "../../components/admin/dashboard/total-admin";
+import axios from "axios";
+const Dashboard = ({ dataDashboard }) => {
   return (
     <DashboardLayout>
       <Head>
@@ -36,13 +25,16 @@ const Dashboard = ({ session }) => {
         <Container maxWidth={false}>
           <Grid container spacing={3}>
             <Grid item xl={3} lg={3} sm={6} xs={12}>
-              <TotalStudents />
+              <TotalStudents students={dataDashboard.students} />
             </Grid>
             <Grid item xl={3} lg={3} sm={6} xs={12}>
-              <TotalTeachers />
+              <TotalTeachers teachers={dataDashboard.teachers} />
             </Grid>
             <Grid item xl={3} lg={3} sm={6} xs={12}>
-              <TotatlCourses sx={{ height: "100%" }} />
+              <TotalAdmin admins={dataDashboard.admins} />
+            </Grid>
+            <Grid item xl={3} lg={3} sm={6} xs={12}>
+              <TotatlCourses courses={dataDashboard.courses} />
             </Grid>
             <Grid item lg={8} md={12} xl={9} xs={12}>
               <StudentBar />
@@ -58,7 +50,9 @@ const Dashboard = ({ session }) => {
 };
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-
+  const dataDashboard = await axios.get(
+    "https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api/users/dashboard"
+  );
   if (!session) {
     return {
       redirect: {
@@ -80,7 +74,7 @@ export const getServerSideProps = async (ctx) => {
 
   return {
     props: {
-      session,
+      dataDashboard: dataDashboard.data,
     },
   };
 };

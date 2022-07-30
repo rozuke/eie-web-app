@@ -1,14 +1,14 @@
 import Head from "next/head";
 import { Box, Container, Grid, Pagination } from "@mui/material";
 import { CourseListToolbar } from "../../../components/admin/course/course-list-toolbar";
-import { CourseListResult } from "../../../components/admin/course/course-list-result";
+import CourseListResult from "../../../components/admin/course/course-list-result";
 import { DashboardLayout } from "../../../components/admin/dashboard-layout";
 import { getSession } from "next-auth/react";
-
-const Course = () => (
+import axios from "axios";
+const Course = ({ courses }) => (
   <DashboardLayout>
     <Head>
-      <title>Products | Material Kit</title>
+      <title>Courses | EIE </title>
     </Head>
     <Box
       component="main"
@@ -20,7 +20,7 @@ const Course = () => (
       <Container maxWidth={false}>
         <CourseListToolbar />
         <Box sx={{ mt: 3, height: 400, boxShadow: 3, borderRadius: 2 }}>
-          <CourseListResult />
+          <CourseListResult courses={courses} />
         </Box>
       </Container>
     </Box>
@@ -28,6 +28,9 @@ const Course = () => (
 );
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
+  const courses = await axios.get(
+    "https://qnnijeqn9g.execute-api.sa-east-1.amazonaws.com/api/courses"
+  );
 
   if (!session) {
     return {
@@ -49,7 +52,9 @@ export const getServerSideProps = async (ctx) => {
   }
 
   return {
-    props: {},
+    props: {
+      courses: courses.data,
+    },
   };
 };
 export default Course;

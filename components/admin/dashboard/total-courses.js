@@ -1,7 +1,7 @@
 import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
 import { LibraryBooks } from "@mui/icons-material";
 
-export const TotatlCourses = () => (
+export const TotatlCourses = ({ courses }) => (
   <Card sx={{ height: "100%" }}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
@@ -10,7 +10,7 @@ export const TotatlCourses = () => (
             Created courses
           </Typography>
           <Typography color="textPrimary" variant="h4">
-            11
+            {courses}
           </Typography>
         </Grid>
         <Grid item>

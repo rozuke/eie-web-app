@@ -1,6 +1,7 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
-const useCourse = () => {
+const CourseContext = createContext();
+export const CourseProvider = ({ children }) => {
   const [course, setCourse] = useState({
     nombre: "",
     libroId: "",
@@ -10,23 +11,11 @@ const useCourse = () => {
     setCourse(newCourse);
   };
 
-  return { course, getCourseForUpdate };
+  return (
+    <CourseContext.Provider value={{ course, getCourseForUpdate }}>
+      {children}
+    </CourseContext.Provider>
+  );
 };
-export default useCourse;
-// export const CourseProvider = ({ children }) => {
-//   const [course, setCourse] = useState({
-//     nombre: "",
-//     libroId: "",
-//   });
 
-//   const getCourseForUpdate = (newCourse) => {
-//     setCourse(newCourse);
-//   };
-//   return (
-//     <CourseContext.Provider value={{ course, getCourseForUpdate }}>
-//       {children}
-//     </CourseContext.Provider>
-//   );
-// };
-
-// export const useCourse = () => useContext(CourseContext);
+export const useCourse = () => useContext(CourseContext);
