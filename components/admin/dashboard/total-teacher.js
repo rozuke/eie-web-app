@@ -6,9 +6,9 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import InsertChartIcon from "@mui/icons-material/InsertChartOutlined";
+import SchoolIcon from "@mui/icons-material/School";
 
-export const TotalTeachers = () => (
+export const TotalTeachers = ({ teachers }) => (
   <Card sx={{ height: "100%" }}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
@@ -17,7 +17,7 @@ export const TotalTeachers = () => (
             Register teachers
           </Typography>
           <Typography color="textPrimary" variant="h4">
-            10
+            {teachers}
           </Typography>
         </Grid>
         <Grid item>
@@ -28,7 +28,7 @@ export const TotalTeachers = () => (
               width: 56,
             }}
           >
-            <InsertChartIcon />
+            <SchoolIcon />
           </Avatar>
         </Grid>
       </Grid>

@@ -6,39 +6,32 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import PeopleIcon from "@mui/icons-material/PeopleOutlined";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
-export const TotalStudents = ({ students }) => (
+export const TotalAdmin = ({ admins }) => (
   <Card sx={{ height: "100%" }}>
     <CardContent>
       <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
         <Grid item>
           <Typography color="textSecondary" gutterBottom variant="overline">
-            Register students
+            Register admins
           </Typography>
           <Typography color="textPrimary" variant="h4">
-            {students}
+            {admins}
           </Typography>
         </Grid>
         <Grid item>
           <Avatar
             sx={{
-              backgroundColor: "#FF006E",
+              backgroundColor: "#FD8A09",
               height: 56,
               width: 56,
             }}
           >
-            <PeopleIcon />
+            <AdminPanelSettingsIcon />
           </Avatar>
         </Grid>
       </Grid>
-      <Box
-        sx={{
-          alignItems: "center",
-          display: "flex",
-          pt: 2,
-        }}
-      ></Box>
     </CardContent>
   </Card>
 );

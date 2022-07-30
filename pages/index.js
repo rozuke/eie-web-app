@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Box,
   Button,
   FormControlLabel,
@@ -12,7 +11,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import eieLogo from "../public/image/eie-logo.png";
-import loginImage from "../public/login.jpeg";
+import GoogleIcon from "@mui/icons-material/Google";
+import { getSession, signIn, useSession } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 function Copyright(props) {
   return (
     <Typography
@@ -40,6 +42,7 @@ const Index = () => {
       password: data.get("password"),
     });
   };
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid
@@ -70,7 +73,7 @@ const Index = () => {
           }}
         >
           <Image src={eieLogo} width={80} height={80} />
-          <Typography component="h1" variant="h5">
+          <Typography component="div" variant="h5">
             Sign in
           </Typography>
           <Box
@@ -79,7 +82,7 @@ const Index = () => {
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
           >
-            <TextField
+            {/* <TextField
               margin="normal"
               required
               fullWidth
@@ -98,14 +101,17 @@ const Index = () => {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
+            /> */}
+            <Box height={100} />
             <Button
               type="submit"
               fullWidth
+              startIcon={<GoogleIcon />}
               variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, padding: "10px 80px" }}
+              onClick={() => signIn("google")}
             >
-              Sign In
+              Sign In with Google
             </Button>
 
             <Copyright sx={{ mt: 5 }} />
@@ -115,5 +121,22 @@ const Index = () => {
     </Grid>
   );
 };
+export async function getServerSideProps({ req }) {
+  const session = await getSession({ req });
+
+  if (session !== null) {
+    const indexRoute = session.rolId === 2 ? "/teacher" : "/admin";
+
+    return {
+      redirect: {
+        destination: indexRoute,
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+}
 
 export default Index;

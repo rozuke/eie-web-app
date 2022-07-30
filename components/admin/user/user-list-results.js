@@ -1,56 +1,105 @@
 import { Box, IconButton } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import { Delete, Edit } from "@mui/icons-material";
+import { useRouter } from "next/router";
+import { useUsers } from "../../../context/userContext";
+import axios from "axios";
+import Swal from "sweetalert2";
+export const UserListResults = ({ users }) => {
+  const { getUserForUpdate } = useUsers();
+  const router = useRouter();
 
-const columns = [
-  { field: "id", headerName: "ID", hide: true },
-  {
-    field: "name",
-    headerName: "User name",
-    width: 300,
-  },
-  {
-    field: "rol",
-    headerName: "User rol",
-    width: 150,
-  },
-  {
-    field: "type",
-    headerName: "Student Type",
-    width: 150,
-  },
-  {
-    field: "options",
-    headerName: "Actions",
-    renderCell: (rowData) => {
-      return (
-        <Box>
-          <IconButton aria-label="delete">
-            <Delete color="error" />
-          </IconButton>
-          <IconButton aria-label="update">
-            <Edit color="primary" />
-          </IconButton>
-        </Box>
-      );
+  const deleteUser = async (id) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You will delete this user",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#003566",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await axios
+          .delete(
+            `https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api/user/${id}`
+          )
+          .then((res) => {
+            if (res) {
+              Swal.fire("Deleted!", "User has been deleted.", "success");
+            }
+          })
+          .catch((err) => {
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: "Something went wrong!",
+            });
+          });
+      }
+    });
+  };
+  const columns = [
+    { field: "personaId", headerName: "ID", hide: true },
+    {
+      field: "nombre",
+      headerName: "Name",
+      width: 300,
     },
-  },
-];
-const rows = [
-  {
-    id: 1,
-    name: "Franz Coimbra Cocarico",
-    rol: "Student",
-    type: "Civil",
-  },
-  {
-    id: 2,
-    name: "Yhoamir Saenz Uscamayta",
-    rol: "Student",
-    type: "Civil",
-  },
-];
-export const UserListResults = () => {
+    {
+      field: "apellidoPaterno",
+      headerName: "Father's Last Name",
+      width: 200,
+    },
+    {
+      field: "apellidoMaterno",
+      headerName: "Mother's Last Name",
+      width: 200,
+    },
+    {
+      field: "email",
+      headerName: "Email",
+      width: 300,
+    },
+    {
+      field: "rol",
+      headerName: "User rol",
+      width: 150,
+    },
+    {
+      field: "tipo",
+      headerName: "Student Type",
+      width: 150,
+    },
+    {
+      field: "options",
+      headerName: "Actions",
+      renderCell: ({ row }) => {
+        return (
+          <Box>
+            <IconButton
+              aria-label="update"
+              onClick={() => {
+                getUserForUpdate(row);
+                router.push(`/admin/users/edit/${row.personaId}`);
+              }}
+            >
+              <Edit color="primary" />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
+              onClick={() => {
+                deleteUser(row.personaId);
+              }}
+            >
+              <Delete color="error" />
+            </IconButton>
+          </Box>
+        );
+      },
+    },
+  ];
+
   const handleCellClick = (param, event) => {
     param.field === "options" && event.stopPropagation();
   };
@@ -58,14 +107,16 @@ export const UserListResults = () => {
     <DataGrid
       pageSize={10}
       columns={columns}
-      rows={rows}
+      getRowId={(rowData) => rowData.personaId}
+      disableColumnSelector={true}
+      rows={users}
       sx={{ backgroundColor: "#FFFFFF" }}
       rowsPerPageOptions={[10]}
       disableSelectionOnClick
       onCellClick={handleCellClick}
       componentsProps={{
         row: {
-          style: { cursor: "pointer", border: "1px solid #EEEEEE" },
+          style: { border: "1px solid #EEEEEE" },
         },
       }}
     />
