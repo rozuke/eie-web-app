@@ -1,7 +1,6 @@
 import axios from "axios";
 let courseBaseURL =
   "https://qnnijeqn9g.execute-api.sa-east-1.amazonaws.com/api";
-let userBaseURL = "https://mwb03srtpc.execute-api.sa-east-1.amazonaws.com/api";
 let activityBaseURL =
   "https://kfaiqnrzja.execute-api.sa-east-1.amazonaws.com/api";
 class TeacherService {

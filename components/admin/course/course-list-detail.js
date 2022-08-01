@@ -29,6 +29,7 @@ export const CourseListDetail = ({ users }) => {
             }
           })
           .catch((err) => {
+            console.log(err);
             Swal.fire({
               icon: "error",
               title: "Oops...",
@@ -70,32 +71,32 @@ export const CourseListDetail = ({ users }) => {
       headerName: "Student Type",
       width: 150,
     },
-    {
-      field: "options",
-      headerName: "Actions",
-      renderCell: ({ row }) => {
-        return (
-          <Box>
-            <IconButton
-              aria-label="update"
-              onClick={() => {
-                router.push(`/admin/users/edit/${row.usuarioId}`);
-              }}
-            >
-              <Edit color="primary" />
-            </IconButton>
-            <IconButton
-              aria-label="delete"
-              onClick={() => {
-                removeUser(row.usuarioId);
-              }}
-            >
-              <Delete color="error" />
-            </IconButton>
-          </Box>
-        );
-      },
-    },
+    // {
+    //   field: "options",
+    //   headerName: "Actions",
+    //   renderCell: ({ row }) => {
+    //     return (
+    //       <Box>
+    //         <IconButton
+    //           aria-label="update"
+    //           onClick={() => {
+    //             router.push(`/admin/users/edit/${row.usuarioId}`);
+    //           }}
+    //         >
+    //           <Edit color="primary" />
+    //         </IconButton>
+    //         <IconButton
+    //           aria-label="delete"
+    //           onClick={() => {
+    //             removeUser(row.usuarioId);
+    //           }}
+    //         >
+    //           <Delete color="error" />
+    //         </IconButton>
+    //       </Box>
+    //     );
+    //   },
+    // },
   ];
 
   const handleCellClick = (param, event) => {
