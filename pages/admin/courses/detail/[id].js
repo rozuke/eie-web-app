@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Container, Grid, Pagination } from "@mui/material";
+import { Box, Container } from "@mui/material";
 import { CourseListToolbar } from "../../../../components/admin/course/course-list-toolbar";
 import { CourseListDetail } from "../../../../components/admin/course/course-list-detail";
 import { DashboardLayout } from "../../../../components/admin/dashboard-layout";
@@ -52,7 +52,7 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   }
-  if (session !== null) {
+  if (session) {
     if (session.rolId !== 3) {
       return {
         redirect: {

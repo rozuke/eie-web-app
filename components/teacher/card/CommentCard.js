@@ -7,21 +7,27 @@ import {
 } from "@mui/material";
 import React from "react";
 
-const CommentCard = () => {
+const CommentCard = ({ comentario }) => {
+  const chartsAvatar = (name) => {
+    const avatar = name.split(" ");
+    const firstLetter = avatar[0][0];
+    const lastLetter = avatar[1][0];
+    return `${firstLetter}${lastLetter}`;
+  };
   return (
     <Card sx={{ width: "100%" }}>
       <CardHeader
-        avatar={<Avatar sx={{ backgroundColor: "#56AFDE" }}>RE</Avatar>}
-        title="Rodrigo Estiven Sulca Acosta"
-        subheader="student"
+        avatar={
+          <Avatar sx={{ backgroundColor: "#56AFDE" }}>
+            {chartsAvatar(comentario.nombre)}
+          </Avatar>
+        }
+        title={comentario.nombre}
+        subheader={comentario.email}
       />
       <CardContent>
         <Typography variant="body1" color="textSecondary">
-          Occaecat dolor excepteur Lorem consectetur sit commodo Lorem sint
-          nulla in. Nisi voluptate sit eu amet sunt aliqua elit fugiat enim.
-          Cillum duis ea ex cillum adipisicing. Magna magna esse ex quis. Est
-          ipsum cupidatat do nulla. Ut ad dolore duis dolore irure proident
-          aliqua minim deserunt velit ex consectetur laborum.
+          {comentario.contenido}
         </Typography>
       </CardContent>
     </Card>

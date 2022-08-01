@@ -3,9 +3,9 @@ import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 
-const CardStudent = (props) => {
+const CardStudent = ({ max }) => {
   return (
-    <Card sx={{ height: "100%" }} {...props}>
+    <Card sx={{ height: "100%" }}>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
@@ -16,7 +16,7 @@ const CardStudent = (props) => {
               participation
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              12
+              {max}
             </Typography>
           </Grid>
           <Grid item>
@@ -37,17 +37,7 @@ const CardStudent = (props) => {
             display: "flex",
             alignItems: "center",
           }}
-        >
-          {/* <ArrowDownwardIcon color="error" /> */}
-          <Typography
-            sx={{
-              mr: 1,
-            }}
-            variant="body2"
-          >
-            Rodrigo Estiven Sulca Acosta
-          </Typography>
-        </Box>
+        ></Box>
       </CardContent>
     </Card>
   );

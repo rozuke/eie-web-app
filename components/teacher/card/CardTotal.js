@@ -38,14 +38,6 @@ const CardTotal = (props) => {
           }}
         >
           {/* <ArrowDownwardIcon color="error" /> */}
-          <Typography
-            sx={{
-              mr: 1,
-            }}
-            variant="body2"
-          >
-            Course Level I
-          </Typography>
         </Box>
       </CardContent>
     </Card>
