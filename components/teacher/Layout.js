@@ -12,11 +12,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import ListOption from "./ListOption";
-
+import { Add, Group, FormatListNumbered } from "@mui/icons-material";
 import Image from "next/image";
 import eieLogo from "../../public/image/eie-logo.png";
-import { Button } from "@mui/material";
-
+import { Avatar, Button, Menu, MenuItem } from "@mui/material";
+import { useRouter } from "next/router";
+import { signOut, useSession } from "next-auth/react";
+import { useState } from "react";
+import { NavItem } from "../nav-item";
+import { DashboardNavbar } from "../admin/dashboard-navbar";
+import { padding } from "@mui/system";
+import Link from "next/link";
+import { useCourse } from "../../context/courseContext";
 const drawerWidth = 240;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
@@ -58,6 +65,7 @@ const AppBar = styled(MuiAppBar, {
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
+
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
@@ -65,6 +73,27 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ children }) {
+  const { course } = useCourse();
+
+  const router = useRouter();
+  const items = [
+    {
+      href: `/teacher/course/${router.query.id}/activities`,
+      icon: <Add fontSize="small" />,
+      title: "New Activity",
+    },
+    {
+      href: `/teacher/course/${router.query.id}/progress`,
+      icon: <Group fontSize="small" />,
+      title: "Student ALC notes",
+    },
+    {
+      href: `/teacher/course/${router.query.id}/review`,
+      icon: <FormatListNumbered fontSize="small" />,
+      title: "Review activities",
+    },
+  ];
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(true);
 
@@ -74,6 +103,15 @@ export default function Layout({ children }) {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const { status, data: session } = useSession();
+  const [anchorElUser, setAnchorElUser] = useState(null);
+  const handleOpenUserMenu = (event) => {
+    setAnchorElUser(event.currentTarget);
+  };
+  const handleCloseUserMenu = () => {
+    setAnchorElUser(null);
   };
 
   return (
@@ -90,12 +128,58 @@ export default function Layout({ children }) {
           >
             <MenuIcon />
           </IconButton>
-          <Button variant="text">
+          <Button variant="text" href="/teacher">
             <Image src={eieLogo} width="40" height="40" />
           </Button>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            EIE Riberalta
+            {course && course.nombre}
           </Typography>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: "flex", flexFlow: "column" }}>
+            <Typography variant="body2">
+              {status === "authenticated" &&
+                `${session.persona.nombre} ${session.persona.apellidoPaterno} ${session.persona.apellidoMaterno}`}
+            </Typography>
+            <Typography variant="caption">Teacher</Typography>
+          </Box>
+          <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+            <Avatar
+              sx={{
+                height: 40,
+                width: 40,
+                ml: 1,
+              }}
+            >
+              <img
+                style={{ width: "40px", height: "40px" }}
+                referrerPolicy="no-referrer"
+                src={status === "authenticated" && session.user.image}
+                alt="ADM"
+              />
+            </Avatar>
+          </IconButton>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            <MenuItem onClick={handleCloseUserMenu}>
+              <Button variant="text" color="menu" onClick={() => signOut()}>
+                Logout
+              </Button>
+            </MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -121,7 +205,26 @@ export default function Layout({ children }) {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <ListOption />
+        <Box sx={{ flexGrow: 1, paddingTop: "20px" }}>
+          {items.map((item, index) => (
+            <Link href={item.href} passHref key={index}>
+              <Button
+                startIcon={item.icon}
+                disableRipple
+                sx={{
+                  textTransform: "none",
+                  color: "#2D3748",
+                  width: "100%",
+                  justifyContent: "flex-start",
+                  px: 3,
+                  py: 1,
+                }}
+              >
+                {item.title}
+              </Button>
+            </Link>
+          ))}
+        </Box>
       </Drawer>
       <Main open={open}>
         <DrawerHeader />

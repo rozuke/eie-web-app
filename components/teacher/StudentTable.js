@@ -1,4 +1,5 @@
 import {
+  Box,
   Paper,
   Table,
   TableBody,
@@ -8,56 +9,81 @@ import {
   TableRow,
 } from "@mui/material";
 import React from "react";
+import { DataGrid } from "@mui/x-data-grid";
 
-function createData(
-  id,
-  name,
-  homework,
-  evaluationE,
-  laboratory,
-  participations
-) {
-  return { id, name, homework, evaluationE, laboratory, participations };
-}
-
-const rows = [
-  createData(1, "Rodrigo Estiven", 80, 30, 15, 21),
-  createData(2, "Rodrigo Acosta", 80, 20, 67, 11),
-  createData(3, "Ricardo Estiven", 80, 50, 12, 61),
-  createData(4, "Malandro Estiven", 80, 36, 15, 71),
-  createData(5, "Palanca Estiven", 80, 31, 76, 11),
+const columns = [
+  { field: "usuarioId", headerName: "ID", hide: true },
+  {
+    field: "nombre",
+    headerName: "Name",
+    width: 400,
+  },
+  {
+    field: "totalParticipaciones",
+    headerName: "Total participations",
+    width: 200,
+  },
+  {
+    field: "notaHomework",
+    headerName: "Homework",
+    headerClassName: "super-app-theme--cell-hw",
+    cellClassName: "super-app-theme--cell-hw",
+    width: 200,
+  },
+  {
+    field: "notaEE",
+    headerName: "Evaluation Exercise",
+    headerClassName: "super-app-theme--cell-ee",
+    cellClassName: "super-app-theme--cell-ee",
+    width: 200,
+  },
+  {
+    field: "notaLaboratory",
+    headerName: "Laboratory",
+    headerClassName: "super-app-theme--cell-lab",
+    cellClassName: "super-app-theme--cell-lab",
+    width: 200,
+  },
 ];
-const StudentTable = () => {
+
+const StudentTable = ({ ustudentsResults }) => {
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Student Name</TableCell>
-            <TableCell align="right">Participations</TableCell>
-            <TableCell align="right">Homework</TableCell>
-            <TableCell align="right">Evaluation Excersice</TableCell>
-            <TableCell align="right">Laboratory</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow
-              key={row.id}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.participations}</TableCell>
-              <TableCell align="right">{row.homework}</TableCell>
-              <TableCell align="right">{row.evaluationE}</TableCell>
-              <TableCell align="right">{row.laboratory}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <Box
+      sx={{
+        mt: 3,
+        height: 400,
+        boxShadow: 3,
+        borderRadius: 2,
+        "& .super-app-theme--cell-hw": {
+          backgroundColor: "rgba(255, 0, 110, 1)",
+          color: "#FFFFFF",
+        },
+        "& .super-app-theme--cell-ee": {
+          backgroundColor: "rgba(251, 86, 7, 1)",
+          color: "#FFFFFF",
+        },
+        "& .super-app-theme--cell-lab": {
+          backgroundColor: "rgba(58, 134, 255, 1)",
+          color: "#FFFFFF",
+        },
+      }}
+    >
+      <DataGrid
+        pageSize={10}
+        columns={columns}
+        getRowId={(rowData) => rowData.usuarioId}
+        disableColumnSelector={true}
+        rows={ustudentsResults}
+        sx={{ backgroundColor: "#FFFFFF" }}
+        rowsPerPageOptions={[10]}
+        disableSelectionOnClick
+        componentsProps={{
+          row: {
+            style: { border: "1px solid #EEEEEE" },
+          },
+        }}
+      />
+    </Box>
   );
 };
 

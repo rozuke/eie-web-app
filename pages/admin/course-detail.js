@@ -37,7 +37,7 @@ export const getServerSideProps = async (ctx) => {
       },
     };
   }
-  if (session !== null) {
+  if (session) {
     if (session.rolId !== 3) {
       return {
         redirect: {

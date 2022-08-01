@@ -59,6 +59,9 @@ const theme = createTheme({
       dark: "#922E2E",
       contrastText: "#FFFFFF",
     },
+    menu: {
+      main: "#7B7B7B",
+    },
     text: {
       primary: "#121828",
       secondary: "#65748B",

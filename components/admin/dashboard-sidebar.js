@@ -1,24 +1,9 @@
 import { useEffect } from "react";
-import NextLink from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
-import {
-  Box,
-  Button,
-  Divider,
-  Drawer,
-  Typography,
-  useMediaQuery,
-} from "@mui/material";
-import { NavItem } from "./nav-item";
-import {
-  ArrowBack,
-  BarChart,
-  Group,
-  LibraryBooks,
-  Person,
-  Logout,
-} from "@mui/icons-material";
+import { Box, Divider, Drawer, Typography, useMediaQuery } from "@mui/material";
+import { NavItem } from "../nav-item";
+import { BarChart, Group, LibraryBooks, Logout } from "@mui/icons-material";
 
 const items = [
   {
