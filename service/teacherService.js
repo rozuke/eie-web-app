@@ -12,6 +12,13 @@ class TeacherService {
     return courses.data;
   }
 
+  static async getProgresStudent(studentId) {
+    const response = await axios.get(
+      `${activityBaseURL}/activity/progress/student/${studentId}`
+    );
+    return response.data;
+  }
+
   static async postNewForum(courseId, forumData) {
     const response = await axios.post(
       `${activityBaseURL}/course/${courseId}/activity/newForum`,

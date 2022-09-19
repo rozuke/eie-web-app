@@ -8,6 +8,7 @@ export const CourseProvider = ({ children }) => {
   });
 
   const [forum, setForum] = useState({});
+  const [progress, setProgress] = useState({});
 
   const getCourseForUpdate = (newCourse) => {
     setCourse(newCourse);
@@ -16,9 +17,20 @@ export const CourseProvider = ({ children }) => {
     setForum(newForum);
   };
 
+  const getStudentProgress = (newProgress) => {
+    setProgress(newProgress);
+  };
+
   return (
     <CourseContext.Provider
-      value={{ course, getCourseForUpdate, forum, getForumForUpdate }}
+      value={{
+        course,
+        getCourseForUpdate,
+        forum,
+        getForumForUpdate,
+        progress,
+        getStudentProgress,
+      }}
     >
       {children}
     </CourseContext.Provider>

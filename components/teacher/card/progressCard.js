@@ -1,32 +1,30 @@
-import { Group } from "@mui/icons-material";
+import { TrendingUp } from "@mui/icons-material";
 import { Avatar, Card, CardContent, Grid, Typography } from "@mui/material";
 import { Box } from "@mui/system";
+import React from "react";
 
-const CardTotal = (props) => {
+const ProgressCard = ({ title, note, icon, color }) => {
   return (
-    <Card sx={{ height: "100%" }} {...props}>
+    <Card sx={{ height: "100%" }}>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: "space-between" }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom>
-              Registered
-            </Typography>
-            <Typography color="textSecondary" gutterBottom>
-              students
+              {title}
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              {props.total}
+              {note === null ? 0 : note}
             </Typography>
           </Grid>
           <Grid item>
             <Avatar
               sx={{
-                backgroundColor: "#FB5607",
+                backgroundColor: color,
                 height: 56,
                 width: 56,
               }}
             >
-              <Group />
+              {icon}
             </Avatar>
           </Grid>
         </Grid>
@@ -36,12 +34,10 @@ const CardTotal = (props) => {
             display: "flex",
             alignItems: "center",
           }}
-        >
-          {/* <ArrowDownwardIcon color="error" /> */}
-        </Box>
+        ></Box>
       </CardContent>
     </Card>
   );
 };
 
-export default CardTotal;
+export default ProgressCard;

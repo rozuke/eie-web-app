@@ -9,33 +9,33 @@ import {
   useTheme,
 } from "@mui/material";
 
-export const StudentBar = (props) => {
+export const StudentBar = ({ success, fauls }) => {
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
-        backgroundColor: "#56AFDE",
+        backgroundColor: "#FFC300",
         barPercentage: 0.5,
         barThickness: 12,
         borderRadius: 4,
         categoryPercentage: 0.5,
-        data: [20, 15, 10, 5],
-        label: "This year",
+        data: success,
+        label: "Successes",
         maxBarThickness: 10,
       },
       {
-        backgroundColor: "#B6D4E7",
+        backgroundColor: "#001D3D",
         barPercentage: 0.5,
         barThickness: 12,
         borderRadius: 4,
         categoryPercentage: 0.5,
-        data: [30, 25, 18, 8],
-        label: "Last year",
+        data: fauls,
+        label: "Fauls",
         maxBarThickness: 10,
       },
     ],
-    labels: ["Level I", "Level II", "Level III", "Level IV"],
+    labels: ["Homework", "Evaluation E.", "Laboratory"],
   };
 
   const options = {
@@ -88,8 +88,8 @@ export const StudentBar = (props) => {
   };
 
   return (
-    <Card sx={{ height: "100%" }} {...props}>
-      <CardHeader title="Students per level" />
+    <Card sx={{ height: "100%" }}>
+      <CardHeader title="Participations Detail" />
       <Divider />
       <CardContent>
         <Box

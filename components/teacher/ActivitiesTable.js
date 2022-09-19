@@ -87,10 +87,6 @@ const ActivitiesTable = ({ activities, courseId }) => {
     },
   ];
 
-  const handleCellClick = (param, event) => {
-    param.field === "options" && event.stopPropagation();
-  };
-
   useEffect(() => {
     setActivitiesList(activities);
   }, [activitiesList]);
@@ -115,7 +111,6 @@ const ActivitiesTable = ({ activities, courseId }) => {
           getForumForUpdate(row);
           router.push(`${router.asPath}/forum-comments/${row.actividadId}`);
         }}
-        onCellClick={handleCellClick}
         componentsProps={{
           row: {
             style: { border: "1px solid #EEEEEE", cursor: "pointer" },
