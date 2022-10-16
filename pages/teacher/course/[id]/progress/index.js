@@ -10,11 +10,13 @@ import TeacherService from "../../../../../service/teacherService";
 
 const Progress = ({ ustudentsResults }) => {
   const total = ustudentsResults.length;
+  console.log(ustudentsResults);
   const maxParticipation = ustudentsResults.reduce(
     (max, student) =>
       max > student.totalParticipaciones ? max : student.totalParticipaciones,
     0
   );
+  console.log(maxParticipation);
 
   return (
     <Layout>

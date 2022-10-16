@@ -7,18 +7,23 @@ export const CourseProvider = ({ children }) => {
     libroId: "",
   });
 
-  const [forum, setForum] = useState({});
+  const [activity, setActivity] = useState({});
   const [progress, setProgress] = useState({});
+  const [flashCard, setFlashCard] = useState({});
 
   const getCourseForUpdate = (newCourse) => {
     setCourse(newCourse);
   };
-  const getForumForUpdate = (newForum) => {
-    setForum(newForum);
+  const setActivityData = (newForum) => {
+    setActivity(newForum);
   };
 
   const getStudentProgress = (newProgress) => {
     setProgress(newProgress);
+  };
+
+  const setFlashCardData = (flashCardData) => {
+    setFlashCard(flash);
   };
 
   return (
@@ -26,8 +31,8 @@ export const CourseProvider = ({ children }) => {
       value={{
         course,
         getCourseForUpdate,
-        forum,
-        getForumForUpdate,
+        activity,
+        setActivityData,
         progress,
         getStudentProgress,
       }}

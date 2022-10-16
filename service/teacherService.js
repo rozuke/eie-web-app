@@ -1,3 +1,4 @@
+import { responsiveFontSizes } from "@mui/material";
 import axios from "axios";
 let courseBaseURL =
   "https://qnnijeqn9g.execute-api.sa-east-1.amazonaws.com/api";
@@ -21,14 +22,14 @@ class TeacherService {
 
   static async postNewForum(courseId, forumData) {
     const response = await axios.post(
-      `${activityBaseURL}/course/${courseId}/activity/newForum`,
+      `${activityBaseURL}/activity/course/${courseId}/activity/new-forum`,
       forumData
     );
     return response.data;
   }
   static async putNewForum(courseId, forumId, forumData) {
     const response = await axios.put(
-      `${activityBaseURL}/course/${courseId}/activity/forum/${forumId}`,
+      `${activityBaseURL}/activity/course/${courseId}/activity/forum/${forumId}`,
       forumData
     );
     return response.data;
@@ -36,7 +37,7 @@ class TeacherService {
 
   static async deleteForum(courseId, forumId) {
     const response = await axios.delete(
-      `${activityBaseURL}/course/${courseId}/activity/forum/${forumId}`
+      `${activityBaseURL}/activity/course/${courseId}/activity/forum/${forumId}`
     );
     return response.data;
   }
@@ -48,9 +49,32 @@ class TeacherService {
     return response.data;
   }
 
+  static async postNewFlashCard(courseId, flashCardData) {
+    const response = await axios.post(
+      `${activityBaseURL}/activity/course/${courseId}/new-flash-card`,
+      flashCardData
+    );
+    return response.data;
+  }
+
+  static async putNewFlashCard(courseId, flashCardId, flashCardData) {
+    const response = await axios.put(
+      `${activityBaseURL}/activity/course/${courseId}/flash-card/${flashCardId}`,
+      flashCardData
+    );
+    return response.data;
+  }
+
+  static async deleteFlashCard(courseId, flashCardId) {
+    const response = await axios.delete(
+      `${activityBaseURL}/activity/course/${courseId}/flash-card/${flashCardId}`
+    );
+    return response.data;
+  }
+
   static async getAllActivitiesByCourse(courseId) {
     const response = await axios.get(
-      `${activityBaseURL}/course/${courseId}/activities`
+      `${activityBaseURL}/activity/course/${courseId}/activities`
     );
     return response.data;
   }
