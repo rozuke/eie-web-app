@@ -10,7 +10,7 @@ import { useCourse } from "../../../../../../context/courseContext";
 import { getSession } from "next-auth/react";
 const NewForo = () => {
   const router = useRouter();
-  const { forum } = useCourse();
+  const { activity } = useCourse();
   const createForum = async (courseId, forumData) => {
     TeacherService.postNewForum(courseId, forumData)
       .then((res) => {
@@ -69,13 +69,13 @@ const NewForo = () => {
   });
   const formik = useFormik({
     initialValues: {
-      topic: forum.topico,
-      description: forum.descripcion,
+      topic: activity.nombre,
+      description: activity.descripcion,
     },
     validationSchema: validationSchema,
     onSubmit: (values) => {
       const dataForum = {
-        topico: values.topic,
+        nombre: values.topic,
         descripcion: values.description,
       };
       const forumId = router.query.forumId;
@@ -156,16 +156,15 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
-    if (session.rolId !== 2) {
-      return {
-        redirect: {
-          destination: "/admin",
-          permanent: false,
-        },
-      };
-    }
+  } else {
+    // if (session.rolId !== 2) {
+    //   return {
+    //     redirect: {
+    //       destination: "/admin",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
   return {
     props: {},

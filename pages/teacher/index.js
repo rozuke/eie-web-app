@@ -29,7 +29,6 @@ const Home = ({ courses }) => {
 };
 export const getServerSideProps = async (ctx) => {
   const session = await getSession(ctx);
-
   let courses;
   if (!session) {
     return {
@@ -38,18 +37,17 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
+  } else {
     courses = await TeacherService.getCourses(session.usuarioId);
 
-    if (session.rolId !== 2) {
-      return {
-        redirect: {
-          destination: "/admin",
-          permanent: false,
-        },
-      };
-    }
+    // if (session.rolId !== 2) {
+    //   return {
+    //     redirect: {
+    //       destination: "/admin",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
 
   return {

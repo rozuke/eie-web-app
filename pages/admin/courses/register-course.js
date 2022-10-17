@@ -233,16 +233,15 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
-    if (session.rolId !== 3) {
-      return {
-        redirect: {
-          destination: "/teacher",
-          permanent: false,
-        },
-      };
-    }
+  } else {
+    // if (session.rolId !== 3) {
+    //   return {
+    //     redirect: {
+    //       destination: "/teacher",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
 
   return {

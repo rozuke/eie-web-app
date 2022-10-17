@@ -43,17 +43,16 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
+  } else {
     comments = await TeacherService.getAllCommentsByForum(id, forumId);
-    if (session.rolId !== 2) {
-      return {
-        redirect: {
-          destination: "/admin",
-          permanent: false,
-        },
-      };
-    }
+    // if (session.rolId !== 2) {
+    //   return {
+    //     redirect: {
+    //       destination: "/admin",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
   return {
     props: {

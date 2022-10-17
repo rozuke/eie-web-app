@@ -7,18 +7,35 @@ export const CourseProvider = ({ children }) => {
     libroId: "",
   });
 
-  const [forum, setForum] = useState({});
+  const [activity, setActivity] = useState({});
+  const [progress, setProgress] = useState({});
+  const [flashCard, setFlashCard] = useState({});
 
   const getCourseForUpdate = (newCourse) => {
     setCourse(newCourse);
   };
-  const getForumForUpdate = (newForum) => {
-    setForum(newForum);
+  const setActivityData = (newForum) => {
+    setActivity(newForum);
+  };
+
+  const getStudentProgress = (newProgress) => {
+    setProgress(newProgress);
+  };
+
+  const setFlashCardData = (flashCardData) => {
+    setFlashCard(flash);
   };
 
   return (
     <CourseContext.Provider
-      value={{ course, getCourseForUpdate, forum, getForumForUpdate }}
+      value={{
+        course,
+        getCourseForUpdate,
+        activity,
+        setActivityData,
+        progress,
+        getStudentProgress,
+      }}
     >
       {children}
     </CourseContext.Provider>

@@ -11,20 +11,20 @@ import {
   useTheme,
 } from "@mui/material";
 
-export const StudentCircle = (props) => {
+export const StudentCircle = ({ success, failure, color, title }) => {
   const theme = useTheme();
 
   const data = {
     datasets: [
       {
-        data: [30, 15, 25, 30],
-        backgroundColor: ["#FB5607", "#FF006E", "#8338EC", "#FFBE0B"],
+        data: [success, failure],
+        backgroundColor: [color, "#001D3D "],
         borderWidth: 8,
         borderColor: "#FFFFFF",
         hoverBorderColor: "#FFFFFF",
       },
     ],
-    labels: ["Level I", "Level II", "Level III", "Level IV"],
+    labels: ["Successes", "Fauls"],
   };
 
   const options = {
@@ -51,30 +51,20 @@ export const StudentCircle = (props) => {
 
   const devices = [
     {
-      title: "Level I",
-      value: 30,
-      color: "#FB5607",
+      title: "Successes",
+      value: success,
+      color: color,
     },
     {
-      title: "Level II",
-      value: 15,
-      color: "#FF006E",
-    },
-    {
-      title: "Level III",
-      value: 25,
-      color: "#8338EC",
-    },
-    {
-      title: "Level IV",
-      value: 30,
-      color: "#FFBE0B",
+      title: "Fauls",
+      value: failure,
+      color: "#001D3D",
     },
   ];
 
   return (
-    <Card {...props}>
-      <CardHeader title="Percentage of students" />
+    <Card>
+      <CardHeader title={title} />
       <Divider />
       <CardContent>
         <Box
@@ -83,7 +73,7 @@ export const StudentCircle = (props) => {
             position: "relative",
           }}
         >
-          <Doughnut data={data} options={options} />
+          {success && <Doughnut data={data} options={options} />}
         </Box>
         <Grid
           container

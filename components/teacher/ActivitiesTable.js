@@ -9,10 +9,30 @@ import { useCourse } from "../../context/courseContext";
 import TeacherService from "../../service/teacherService";
 
 const ActivitiesTable = ({ activities, courseId }) => {
-  const { getForumForUpdate } = useCourse();
+  const { setActivityData } = useCourse();
   const router = useRouter();
   const [activitiesList, setActivitiesList] = useState();
-  const removeForum = async (courseId, forumId) => {
+
+  const deleteActivity = (courseId, activityId, type) => {
+    switch (type) {
+      case "forum":
+        return TeacherService.deleteForum(courseId, activityId);
+
+      case "flash card":
+        return TeacherService.deleteFlashCard(courseId, activityId);
+    }
+  };
+
+  const selectRouteActivity = (type, activityId) => {
+    switch (type) {
+      case "forum":
+        return `${router.asPath}/edit-forum/${activityId}`;
+      case "flash card":
+        return `${router.asPath}/edit-flash-card/${activityId}`;
+    }
+  };
+
+  const removeActivity = async (courseId, activityId, type) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You will delete this user",
@@ -23,7 +43,7 @@ const ActivitiesTable = ({ activities, courseId }) => {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.isConfirmed) {
-        TeacherService.deleteForum(courseId, forumId)
+        deleteActivity(courseId, activityId, type)
           .then((res) => {
             if (res) {
               Swal.fire("Deleted!", "User has been deleted.", "success");
@@ -42,7 +62,7 @@ const ActivitiesTable = ({ activities, courseId }) => {
   const columns = [
     { field: "actividadId", headerName: "ID", hide: true },
     {
-      field: "topico",
+      field: "nombre",
       headerName: "Name Activity",
       width: 300,
     },
@@ -60,13 +80,14 @@ const ActivitiesTable = ({ activities, courseId }) => {
       field: "options",
       headerName: "Actions",
       renderCell: ({ row }) => {
+        const route = selectRouteActivity(row.tipo, row.actividadId);
         return (
           <Box>
-            <Link href={`${router.asPath}/edit-forum/${row.actividadId}`}>
+            <Link href={route}>
               <IconButton
                 aria-label="update"
                 onClick={() => {
-                  getForumForUpdate(row);
+                  setActivityData(row);
                 }}
               >
                 <Edit color="primary" />
@@ -76,7 +97,7 @@ const ActivitiesTable = ({ activities, courseId }) => {
             <IconButton
               aria-label="delete"
               onClick={() => {
-                removeForum(courseId, row.actividadId);
+                removeActivity(courseId, row.actividadId, row.tipo);
               }}
             >
               <Delete color="error" />
@@ -87,13 +108,14 @@ const ActivitiesTable = ({ activities, courseId }) => {
     },
   ];
 
+  useEffect(() => {
+    setActivitiesList(activities);
+  }, [activitiesList]);
+
   const handleCellClick = (param, event) => {
     param.field === "options" && event.stopPropagation();
   };
 
-  useEffect(() => {
-    setActivitiesList(activities);
-  }, [activitiesList]);
   return (
     <Box
       sx={{
@@ -111,11 +133,12 @@ const ActivitiesTable = ({ activities, courseId }) => {
         sx={{ backgroundColor: "#FFFFFF" }}
         rowsPerPageOptions={[10]}
         disableSelectionOnClick
-        onRowClick={({ row }) => {
-          getForumForUpdate(row);
-          router.push(`${router.asPath}/forum-comments/${row.actividadId}`);
-        }}
         onCellClick={handleCellClick}
+        onRowClick={({ row }) => {
+          if (row.tipo == "forum") {
+            router.push(`${router.asPath}/forum-comments/${row.actividadId}`);
+          }
+        }}
         componentsProps={{
           row: {
             style: { border: "1px solid #EEEEEE", cursor: "pointer" },

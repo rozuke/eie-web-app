@@ -22,7 +22,7 @@ const CardStudent = ({ max }) => {
           <Grid item>
             <Avatar
               sx={{
-                backgroundColor: "#FF006E",
+                backgroundColor: "#C11CAD",
                 height: 56,
                 width: 56,
               }}

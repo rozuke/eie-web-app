@@ -10,11 +10,13 @@ import TeacherService from "../../../../../service/teacherService";
 
 const Progress = ({ ustudentsResults }) => {
   const total = ustudentsResults.length;
+  console.log(ustudentsResults);
   const maxParticipation = ustudentsResults.reduce(
     (max, student) =>
       max > student.totalParticipaciones ? max : student.totalParticipaciones,
     0
   );
+  console.log(maxParticipation);
 
   return (
     <Layout>
@@ -48,19 +50,18 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
+  } else {
     ustudentsResults = await TeacherService.getStudentsResultsByCourse(
       ctx.query.id
     );
-    if (session.rolId !== 2) {
-      return {
-        redirect: {
-          destination: "/admin",
-          permanent: false,
-        },
-      };
-    }
+    // if (session.rolId !== 2) {
+    //   return {
+    //     redirect: {
+    //       destination: "/admin",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
   return {
     props: {

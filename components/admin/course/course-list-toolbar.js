@@ -36,7 +36,6 @@ export const CourseListToolbar = () => {
             onClick={() => router.push("/admin/courses/register-course")}
           >
             {router.query.id ? "Add user" : "Add course"}
-            {console.log(course)}
           </Button>
         </Box>
       </Box>
@@ -45,17 +44,17 @@ export const CourseListToolbar = () => {
           <CardContent>
             <Box sx={{ maxWidth: 500 }}>
               {/* <TextField
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Search />
-                  </InputAdornment>
-                ),
-              }}
-              placeholder="Search product"
-              variant="outlined"
-            /> */}
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Search />
+                    </InputAdornment>
+                  ),
+                }}
+                placeholder="Search user"
+                variant="outlined"
+              /> */}
             </Box>
           </CardContent>
         </Card>

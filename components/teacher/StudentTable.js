@@ -10,6 +10,8 @@ import {
 } from "@mui/material";
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid";
+import { useCourse } from "../../context/courseContext";
+import { useRouter } from "next/router";
 
 const columns = [
   { field: "usuarioId", headerName: "ID", hide: true },
@@ -47,6 +49,8 @@ const columns = [
 ];
 
 const StudentTable = ({ ustudentsResults }) => {
+  const { getStudentProgress } = useCourse();
+  const router = useRouter();
   return (
     <Box
       sx={{
@@ -77,9 +81,14 @@ const StudentTable = ({ ustudentsResults }) => {
         sx={{ backgroundColor: "#FFFFFF" }}
         rowsPerPageOptions={[10]}
         disableSelectionOnClick
+        onRowClick={({ row }) => {
+          getStudentProgress(row);
+          router.push(`${router.asPath}/student/${row.usuarioId}`);
+          console.log(row);
+        }}
         componentsProps={{
           row: {
-            style: { border: "1px solid #EEEEEE" },
+            style: { border: "1px solid #EEEEEE", cursor: "pointer" },
           },
         }}
       />

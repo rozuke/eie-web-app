@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Box, Container } from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { CourseListToolbar } from "../../../../components/admin/course/course-list-toolbar";
 import { CourseListDetail } from "../../../../components/admin/course/course-list-detail";
 import { DashboardLayout } from "../../../../components/admin/dashboard-layout";
@@ -7,7 +7,11 @@ import { getSession } from "next-auth/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import { useCourse } from "../../../../context/courseContext";
+import SearchBar from "../../../../components/admin/search-bar";
+
 const CourseDetail = ({ users }) => {
+  const { course } = useCourse();
   const router = useRouter();
   const [userTable, setUserTable] = useState([]);
 
@@ -28,7 +32,20 @@ const CourseDetail = ({ users }) => {
         }}
       >
         <Container maxWidth={false}>
-          <CourseListToolbar />
+          <Box
+            sx={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+              m: -1,
+            }}
+          >
+            <Typography sx={{ m: 1 }} variant="h4">
+              {router.query.id && course.nombre}
+            </Typography>
+          </Box>
+          <SearchBar />
           <Box sx={{ mt: 3, height: 400, boxShadow: 3, borderRadius: 2 }}>
             <CourseListDetail users={users} />
           </Box>
@@ -51,16 +68,15 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
-    if (session.rolId !== 3) {
-      return {
-        redirect: {
-          destination: "/teacher",
-          permanent: false,
-        },
-      };
-    }
+  } else {
+    // if (session.rolId !== 3) {
+    //   return {
+    //     redirect: {
+    //       destination: "/teacher",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
 
   return {
