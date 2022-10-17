@@ -156,16 +156,15 @@ export const getServerSideProps = async (ctx) => {
         permanent: false,
       },
     };
-  }
-  if (session) {
-    if (session.rolId !== 2) {
-      return {
-        redirect: {
-          destination: "/admin",
-          permanent: false,
-        },
-      };
-    }
+  } else {
+    // if (session.rolId !== 2) {
+    //   return {
+    //     redirect: {
+    //       destination: "/admin",
+    //       permanent: false,
+    //     },
+    //   };
+    // }
   }
   return {
     props: {},
